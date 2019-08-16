@@ -1,0 +1,60 @@
+#content {
+	margin-top: 120px;
+}
+
+.user-input {
+	width: 90%;
+	margin: 20px auto;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 20px 10px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+	margin: 0 auto;
+
+	.form-div {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	label,
+	input {
+		display: inline-block;
+		width: 45%;
+	}
+}
+
+.cash-flow-input,
+.npv-results-table {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #ccc;
+}
+
+.cf-input-row,
+.pv-cash-flow-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	text-align: center;
+
+	.cf-input-col1,
+	.pv-cash-flow-col1 {
+		width: 30%;
+	}
+
+	.cf-input-col2,
+	.pv-cash-flow-col2 {
+		width: 40%;
+
+		input {
+			width: 100%;
+			text-align: right;
+		}
+	}
+}
