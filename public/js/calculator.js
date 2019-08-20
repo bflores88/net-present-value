@@ -1,78 +1,87 @@
 'use-strict';
 
-function netPresentValue() {
-	let discountRate = 0;
-	let initialInvestment = 0;
-	let numberOfPeriods = 0;
-	let cashFlows = [];
-	let presentValueOfCashFlows = [];
+class netPresentValueCalculator {
+	constructor() {
+		this.discountRate = 0;
+		this.initialInvestment = 0;
+		this.numberOfPeriods = 0;
+		this.cashFlows = [];
+		this.presentValueOfCashFlows = [];
+	}
 
-	const getDiscountRate = () => discountRate;
-	const setDiscountRate = (rate) => (discountRate = +rate / 100);
-	const getInitialInvestment = () => initialInvestment;
+	getDiscountRate() {
+		return this.discountRate;
+	}
 
-	const setInitialInvestment = (investmentAmount) => {
-		initialInvestment = +investmentAmount;
-		if (cashFlows.length === numberOfPeriods) {
-			cashFlows.unshift(+investmentAmount);
+	setDiscountRate(rate) {
+		return (this.discountRate = rate / 100);
+	}
+
+	getInitialInvestment() {
+		return this.initialInvestment;
+	}
+
+	setInitialInvestment(investmentAmount) {
+		let newAmount = -investmentAmount;
+		if (!investmentAmount) newAmount = 0;
+		this.initialInvestment = newAmount;
+
+		if (this.cashFlows.length === this.numberOfPeriods) {
+			this.cashFlows.unshift(newAmount);
 		} else {
-			cashFlows.splice(0, 1, +investmentAmount);
+			this.cashFlows.splice(0, 1, newAmount);
 		}
-	};
+	}
 
-	const setNumberOfPeriods = (period) => (numberOfPeriods = period);
-	const matchCashFlowsToNumberOfPeriods = (period) => {
+	setNumberOfPeriods(period) {
+		this.numberOfPeriods = period;
+	}
+
+	matchCashFlowsToNumberOfPeriods(period) {
 		let newCashFlows;
-		initialInvestment ? (newCashFlows = [initialInvestment]) : (newCashFlows = [0]);
+		this.initialInvestment ? (newCashFlows = [this.initialInvestment]) : (newCashFlows = [0]);
 
 		for (let i = 0; i < period; i++) {
 			newCashFlows.push(0);
 		}
 
-		cashFlows = newCashFlows;
-	};
+		this.cashFlows = newCashFlows;
+	}
 
-	const processPeriodLength = (period) => {
+	processPeriodLength(period) {
 		const periodToNumber = +period;
-		return setNumberOfPeriods(periodToNumber), matchCashFlowsToNumberOfPeriods(periodToNumber);
-	};
+		return this.setNumberOfPeriods(periodToNumber), this.matchCashFlowsToNumberOfPeriods(periodToNumber);
+	}
 
-	const getPeriodLength = () => numberOfPeriods;
-	const getCashFlows = () => cashFlows;
-	const setCashFlows = (period, amount) => (cashFlows[+period] = +amount);
-
-	const updatePresentValueCashFlowsArray = () => {
-		const newArr = [...cashFlows];
-		return (presentValueOfCashFlows = newArr.map((value, index) => {
-			const npvValue = value / Math.pow(1 + discountRate, index);
+	getPeriodLength() {
+		return this.numberOfPeriods;
+	}
+	getCashFlows() {
+		return this.cashFlows;
+	}
+	setCashFlows(period, amount) {
+		this.cashFlows[+period] = +amount;
+	}
+	updatePresentValueCashFlowsArray() {
+		const newArr = [...this.cashFlows];
+		return (this.presentValueOfCashFlows = newArr.map((value, index) => {
+			const npvValue = value / Math.pow(1 + this.discountRate, index);
 			return +npvValue.toFixed(2);
 		}));
-	};
+	}
 
-	const getTotalPresentValueOfCashFlows = () => {
-		return presentValueOfCashFlows.reduce((acc, curr, idx) => {
+	getTotalPresentValueOfCashFlows() {
+		return this.presentValueOfCashFlows.reduce((acc, curr, idx) => {
 			return idx > 0 ? acc + curr : acc;
 		});
-	};
+	}
 
-	const calculateNPV = () => {
-		updatePresentValueCashFlowsArray();
+	calculateNPV() {
+		this.updatePresentValueCashFlowsArray();
+		console.log(this.presentValueOfCashFlows);
 		return {
-			npv: getTotalPresentValueOfCashFlows(),
-			pvcfs: presentValueOfCashFlows,
+			npv: this.getTotalPresentValueOfCashFlows(),
+			pvcfs: this.presentValueOfCashFlows,
 		};
-	};
-
-	return {
-		setDiscountRate,
-		getDiscountRate,
-		setInitialInvestment,
-		getInitialInvestment,
-		processPeriodLength,
-		getPeriodLength,
-		getCashFlows,
-		setCashFlows,
-		calculateNPV,
-		getTotalPresentValueOfCashFlows,
-	};
+	}
 }

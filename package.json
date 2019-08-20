@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "net present value calculator",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha public/test --watch"
   },
   "author": "brenda",
   "license": "ISC",

@@ -64,21 +64,28 @@ form {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  text-align: center;
   margin: 5px 0; }
   .cf-input-row .cf-input-col1,
   .cf-input-row .pv-cash-flow-col1,
+  .cf-input-row .col1-header,
   .pv-cash-flow-row .cf-input-col1,
-  .pv-cash-flow-row .pv-cash-flow-col1 {
+  .pv-cash-flow-row .pv-cash-flow-col1,
+  .pv-cash-flow-row .col1-header {
     width: 30%;
     display: flex;
     flex-direction: column;
-    justify-content: center; }
+    justify-content: center;
+    text-align: center; }
+  .cf-input-row .col2-header,
+  .pv-cash-flow-row .col2-header {
+    width: 40%;
+    text-align: center; }
   .cf-input-row .cf-input-col2,
   .cf-input-row .pv-cash-flow-col2,
   .pv-cash-flow-row .cf-input-col2,
   .pv-cash-flow-row .pv-cash-flow-col2 {
-    width: 40%; }
+    width: 40%;
+    text-align: right; }
     .cf-input-row .cf-input-col2 input,
     .cf-input-row .pv-cash-flow-col2 input,
     .pv-cash-flow-row .cf-input-col2 input,
@@ -114,3 +121,9 @@ input {
   text-align: right;
   font-size: 14px;
   padding: 5px 10px; }
+
+button:hover {
+  cursor: pointer; }
+
+button:disabled {
+  cursor: not-allowed; }

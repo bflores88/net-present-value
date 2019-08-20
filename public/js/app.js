@@ -1,6 +1,6 @@
 'use strict';
 
-const npv = netPresentValue();
+const npv = new netPresentValueCalculator();
 
 const discountRate = () => npv.getDiscountRate();
 const initialInvestment = () => npv.getInitialInvestment();
@@ -23,45 +23,70 @@ function checkButtonValidity() {
 }
 
 function numberFormatter(event) {
-	const formattedNumber = parseFloat(event.target.value.replace(/,/g, '')).toLocaleString('en-US');
 	const getClassName = document.getElementsByClassName(event.target.className);
-	getClassName === 'cf-input'
-		? (getClassName[event.target.dataset.year - 1].value = formattedNumber)
-		: (getClassName[0].value = formattedNumber);
+	let newNumber = event.target.value;
+
+	if (!newNumber || newNumber === '-') {
+		return {
+			str: newNumber,
+			int: 0,
+		};
+	}
+
+	if (!/^-?\d*[.,]?\d*$/.test(parseFloat(event.target.value.replace(/,/g, '')))) {
+		newNumber = event.target.value
+			.split('')
+			.filter((char) => char !== event.key)
+			.join('');
+	} else {
+		newNumber = parseFloat(event.target.value.replace(/,/g, '')).toLocaleString('en-US');
+	}
+
+	event.target.className === 'cf-input'
+		? (getClassName[event.target.dataset.year - 1].value = newNumber)
+		: (getClassName[0].value = newNumber);
+
+	const newNumObj = {
+		str: newNumber,
+		int: parseFloat(newNumber.replace(/,/g, '')),
+	};
+
+	return newNumObj;
 }
 
 function discountRateHandler(event) {
-	setDiscountRate(event.target.value);
+	setDiscountRate(numberFormatter(event).int);
 	return checkButtonValidity();
 }
 
 function initialInvestmentEventHandler(event) {
-	if (periodLength()) {
+	const amount = numberFormatter(event);
+	setInitialInvestment(amount.int);
+
+	if (document.querySelector('.cf-input-col2')) {
 		const updateCashFlowInput = document.querySelector('.initial');
-		updateCashFlowInput.innerHTML = '$ ' + Number(event.target.value).toLocaleString();
+		updateCashFlowInput.innerHTML = '$ ' + initialInvestment().toLocaleString();
 	}
 
-	setInitialInvestment(event.target.value);
-	numberFormatter(event);
 	return checkButtonValidity();
 }
 
 function periodEventHandler(event) {
-	if (!Number.isInteger(event.target.value)) {
-		event.target.value = Math.round(event.target.value);
-	}
-	if (event.target.value < 1) {
+	const period = numberFormatter(event).int;
+
+	if (event.target.value < 0) {
 		event.target.value = '1';
+		alert('Must be zero or greater.');
 	}
 	if (event.target.value > 30) {
 		event.target.value = '30';
-		alert('Max value of 30 periods');
+		alert('Max value of 30 periods.');
 	}
 
 	const cashflowInputDiv = document.querySelector('.cash-flow-input');
 	cashflowInputDiv.style.display = 'block';
 
-	processPeriodLength(Math.round(event.target.value));
+	processPeriodLength(Math.ceil(period));
 	checkButtonValidity();
 	return cashFlowArrayToTable(getCashFlows(), 'cash flow');
 }
@@ -72,7 +97,7 @@ function calculateHandler() {
 	const pvcfs = results.pvcfs;
 
 	const resultSummary = document.querySelector('.results-summary');
-	resultSummary.innerHTML = 'Net Present Value: ' + npv;
+	resultSummary.innerHTML = 'Net Present Value: $ ' + parseFloat(npv).toLocaleString();
 
 	const resultsDiv = document.querySelector('#results');
 	resultsDiv.style.display = 'block';
@@ -82,7 +107,7 @@ function calculateHandler() {
 
 function cashFlowArrayToTable(cashFlowArray, type) {
 	let headerColumn1 = 'Year';
-	let headerColumn2 = 'Present Value of Cash Flows';
+	let headerColumn2 = 'PV of Cash Flows Discounted at ' + discountRate() * 100 + '%';
 	let placement = document.querySelector('.npv-results-table');
 	let className = 'pv-cash-flow';
 	let tableDepth = cashFlowArray.length + 1;
@@ -104,12 +129,18 @@ function cashFlowArrayToTable(cashFlowArray, type) {
 
 		const newRowCol1 = document.createElement('div');
 		newRowCol1.className = className + '-col1';
-		i === 0 ? (newRowCol1.innerHTML = headerColumn1) : (newRowCol1.innerHTML = i - 1);
+		newRowCol1.innerHTML = i - 1;
 		newRow.appendChild(newRowCol1);
 
 		const newRowCol2 = document.createElement('div');
 		newRowCol2.className = className + '-col2';
 		newRow.appendChild(newRowCol2);
+
+		if (i === 0) {
+			newRowCol1.innerHTML = headerColumn1;
+			newRowCol1.className = 'col1-header';
+			newRowCol2.className = 'col2-header';
+		}
 
 		if (requiresInput && i > 0) {
 			if (i === 1) {
@@ -130,18 +161,22 @@ function cashFlowArrayToTable(cashFlowArray, type) {
 			});
 
 			function inputEventHandler(event) {
-				numberFormatter(event);
-				setCashFlows(event.target.dataset.year, event.target.value);
+				if (event.target.value.includes('.')) {
+					return setTimeout(() => {
+						setCashFlows(event.target.dataset.year, numberFormatter(event).int);
+					}, 1000);
+				}
+				setCashFlows(event.target.dataset.year, numberFormatter(event).int);
 			}
 		} else if (i > 0) {
-			newRowCol2.innerHTML = cashFlowArray[i - 1];
+			newRowCol2.innerHTML = parseFloat(cashFlowArray[i - 1]).toLocaleString();
 		} else {
 			newRowCol2.innerHTML = headerColumn2;
 		}
 	}
 }
 
-const eventHandler = (event) => {
+function switchNames(event) {
 	switch (event.target.name) {
 		case 'rate':
 			return discountRateHandler(event);
@@ -151,6 +186,16 @@ const eventHandler = (event) => {
 			return periodEventHandler(event);
 		default:
 			return;
+	}
+}
+
+const eventHandler = (event) => {
+	if (event.target.value.includes('.')) {
+		setTimeout(() => {
+			switchNames(event);
+		}, 1000);
+	} else {
+		switchNames(event);
 	}
 };
 

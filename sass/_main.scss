@@ -66,20 +66,27 @@ form {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
-	text-align: center;
 	margin: 5px 0;
 
 	.cf-input-col1,
-	.pv-cash-flow-col1 {
+	.pv-cash-flow-col1,
+	.col1-header {
 		width: 30%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		text-align: center;
+	}
+
+	.col2-header {
+		width: 40%;
+		text-align: center;
 	}
 
 	.cf-input-col2,
 	.pv-cash-flow-col2 {
 		width: 40%;
+		text-align: right;
 
 		input {
 			width: 100%;
