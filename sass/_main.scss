@@ -1,5 +1,17 @@
 #content {
-	margin-top: 120px;
+	margin-top: 100px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+
+	@media (min-width: 500px) and (min-height: 401px) {
+		width: 80%;
+	}
+
+	@media (min-width: 1000px) {
+		display: flex;
+		flex-direction: row;
+	}
 }
 
 .user-input {
@@ -7,7 +19,12 @@
 	margin: 20px auto;
 	border: 1px solid #ccc;
 	border-radius: 5px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	padding: 20px 10px;
+
+	@media (min-width: 1000px) {
+		width: 40%;
+	}
 }
 
 form {
@@ -20,11 +37,17 @@ form {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
+		margin: 10px 0;
+		height: 25px;
 	}
 
-	label,
+	label {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+
 	input {
-		display: inline-block;
 		width: 45%;
 	}
 }
@@ -33,7 +56,9 @@ form {
 .npv-results-table {
 	display: flex;
 	flex-direction: column;
-	border: 1px solid #ccc;
+	background-color: hsl(215, 80%, 80%);
+	border-radius: 5px;
+	padding: 15px 10px;
 }
 
 .cf-input-row,
@@ -42,10 +67,14 @@ form {
 	flex-direction: row;
 	justify-content: space-around;
 	text-align: center;
+	margin: 5px 0;
 
 	.cf-input-col1,
 	.pv-cash-flow-col1 {
 		width: 30%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
 	.cf-input-col2,
@@ -54,7 +83,19 @@ form {
 
 		input {
 			width: 100%;
-			text-align: right;
 		}
+	}
+}
+
+#results {
+	margin: 20px auto;
+
+	@media (min-width: 1000px) {
+		width: 45%;
+	}
+
+	.results-summary {
+		text-align: center;
+		margin-bottom: 20px;
 	}
 }

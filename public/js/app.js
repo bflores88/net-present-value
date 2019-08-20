@@ -2,6 +2,8 @@
 
 const npv = netPresentValue();
 
+const discountRate = () => npv.getDiscountRate();
+const initialInvestment = () => npv.getInitialInvestment();
 const setDiscountRate = (rate) => npv.setDiscountRate(rate);
 const setInitialInvestment = (investment) => npv.setInitialInvestment(investment);
 const processPeriodLength = (period) => npv.processPeriodLength(period);
@@ -10,13 +12,38 @@ const setCashFlows = (year, amount) => npv.setCashFlows(year, amount);
 const getCashFlows = () => npv.getCashFlows();
 const calculateNPV = () => npv.calculateNPV();
 
+function checkButtonValidity() {
+	const getSubmitButton = document.querySelector('.form-submit');
+
+	if (discountRate() !== 0 && initialInvestment() !== 0 && periodLength() > 0) {
+		return (getSubmitButton.disabled = false);
+	} else {
+		return (getSubmitButton.disabled = true);
+	}
+}
+
+function numberFormatter(event) {
+	const formattedNumber = parseFloat(event.target.value.replace(/,/g, '')).toLocaleString('en-US');
+	const getClassName = document.getElementsByClassName(event.target.className);
+	getClassName === 'cf-input'
+		? (getClassName[event.target.dataset.year - 1].value = formattedNumber)
+		: (getClassName[0].value = formattedNumber);
+}
+
+function discountRateHandler(event) {
+	setDiscountRate(event.target.value);
+	return checkButtonValidity();
+}
+
 function initialInvestmentEventHandler(event) {
 	if (periodLength()) {
 		const updateCashFlowInput = document.querySelector('.initial');
 		updateCashFlowInput.innerHTML = '$ ' + Number(event.target.value).toLocaleString();
 	}
 
-	return setInitialInvestment(event.target.value);
+	setInitialInvestment(event.target.value);
+	numberFormatter(event);
+	return checkButtonValidity();
 }
 
 function periodEventHandler(event) {
@@ -28,8 +55,14 @@ function periodEventHandler(event) {
 	}
 	if (event.target.value > 30) {
 		event.target.value = '30';
+		alert('Max value of 30 periods');
 	}
+
+	const cashflowInputDiv = document.querySelector('.cash-flow-input');
+	cashflowInputDiv.style.display = 'block';
+
 	processPeriodLength(Math.round(event.target.value));
+	checkButtonValidity();
 	return cashFlowArrayToTable(getCashFlows(), 'cash flow');
 }
 
@@ -40,6 +73,9 @@ function calculateHandler() {
 
 	const resultSummary = document.querySelector('.results-summary');
 	resultSummary.innerHTML = 'Net Present Value: ' + npv;
+
+	const resultsDiv = document.querySelector('#results');
+	resultsDiv.style.display = 'block';
 
 	cashFlowArrayToTable(pvcfs, 'results');
 }
@@ -83,14 +119,20 @@ function cashFlowArrayToTable(cashFlowArray, type) {
 			}
 			const newCashFlowInput = document.createElement('input');
 			newCashFlowInput.type = 'text';
+			newCashFlowInput.className = 'cf-input';
 			newCashFlowInput.dataset.year = i - 1;
 			newCashFlowInput.setAttribute('name', 'cash-flow-input');
 			newCashFlowInput.placeholder = '0';
 			newRowCol2.appendChild(newCashFlowInput);
 
-			newCashFlowInput.addEventListener('keyup', (event) => {
-				setCashFlows(event.target.dataset.year, event.target.value);
+			['keyup', 'change'].forEach((event) => {
+				newCashFlowInput.addEventListener(event, inputEventHandler, false);
 			});
+
+			function inputEventHandler(event) {
+				numberFormatter(event);
+				setCashFlows(event.target.dataset.year, event.target.value);
+			}
 		} else if (i > 0) {
 			newRowCol2.innerHTML = cashFlowArray[i - 1];
 		} else {
@@ -102,7 +144,7 @@ function cashFlowArrayToTable(cashFlowArray, type) {
 const eventHandler = (event) => {
 	switch (event.target.name) {
 		case 'rate':
-			return setDiscountRate(event.target.value);
+			return discountRateHandler(event);
 		case 'initial-investment':
 			return initialInvestmentEventHandler(event);
 		case 'period':
@@ -115,18 +157,6 @@ const eventHandler = (event) => {
 const formInputs = document.querySelectorAll('input');
 formInputs.forEach((input) => {
 	['keyup', 'change'].forEach((event) => input.addEventListener(event, eventHandler, false));
-	// input.addEventListener('change', (event) => {
-	// 	switch (event.target.name) {
-	// 		case 'rate':
-	// 			return setDiscountRate(event.target.value);
-	// 		case 'initial-investment':
-	// 			return initialInvestmentEventHandler(event);
-	// 		case 'period':
-	// 			return periodEventHandler(event);
-	// 		default:
-	// 			return;
-	// 	}
-	// });
 });
 
 const calculateButton = document.querySelector('.form-submit');
