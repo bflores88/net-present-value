@@ -22,22 +22,27 @@
       display: flex;
       flex-direction: row; } }
 
-.user-input {
+.user-input,
+#results {
   width: 90%;
   margin: 20px auto;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  padding: 20px 10px; }
+  padding: 30px 10px; }
   @media (min-width: 1000px) {
-    .user-input {
+    .user-input,
+    #results {
       width: 40%; } }
 
 form {
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 90%;
   margin: 0 auto; }
+  @media (min-width: 1000px) {
+    form {
+      width: 80%; } }
   form .form-div {
     width: 100%;
     display: flex;
@@ -55,9 +60,20 @@ form {
 .npv-results-table {
   display: flex;
   flex-direction: column;
+  padding: 15px 10px;
+  margin: 20px 0;
+  font-weight: 700; }
+
+.cash-flow-input {
   background-color: #a3c5f5;
-  border-radius: 5px;
-  padding: 15px 10px; }
+  border-radius: 5px; }
+
+.pv-cash-flow-row {
+  border-bottom: 1px dotted #709ddb;
+  padding-bottom: 5px; }
+  .pv-cash-flow-row:hover:not(:first-of-type) {
+    color: #a3c5f5;
+    cursor: default; }
 
 .cf-input-row,
 .pv-cash-flow-row {
@@ -76,6 +92,12 @@ form {
     flex-direction: column;
     justify-content: center;
     text-align: center; }
+  .cf-input-row .col1-header,
+  .cf-input-row .col2-header,
+  .pv-cash-flow-row .col1-header,
+  .pv-cash-flow-row .col2-header {
+    margin-bottom: 10px;
+    font-weight: 400; }
   .cf-input-row .col2-header,
   .pv-cash-flow-row .col2-header {
     width: 40%;
@@ -91,6 +113,17 @@ form {
     .pv-cash-flow-row .cf-input-col2 input,
     .pv-cash-flow-row .pv-cash-flow-col2 input {
       width: 100%; }
+
+.results-summary {
+  font-size: 25px;
+  color: #5c8fd6; }
+  .results-summary .results-amount:hover {
+    font-size: 30px; }
+  .results-summary .results-title {
+    color: #bbb;
+    font-size: 16px; }
+  .results-summary p {
+    margin: 5px 0; }
 
 #results {
   margin: 20px auto; }
@@ -120,10 +153,22 @@ input {
   display: inline-block;
   text-align: right;
   font-size: 14px;
-  padding: 5px 10px; }
+  padding: 5px 10px;
+  color: #506d95; }
+
+button {
+  margin: 5px 0;
+  padding: 10px 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #36797d;
+  color: #e0f4f5; }
 
 button:hover {
-  cursor: pointer; }
+  cursor: pointer;
+  background-color: #5eb6ba; }
 
 button:disabled {
-  cursor: not-allowed; }
+  cursor: not-allowed;
+  background-color: #eee;
+  color: #ccc; }

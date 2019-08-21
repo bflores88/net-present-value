@@ -9,12 +9,17 @@ class netPresentValueCalculator {
 		this.presentValueOfCashFlows = [];
 	}
 
+	hello() {
+		return 'hello';
+	}
+
 	getDiscountRate() {
-		return this.discountRate;
+		return this.discountRate * 100;
 	}
 
 	setDiscountRate(rate) {
-		return (this.discountRate = rate / 100);
+		const newRate = parseFloat(rate / 100);
+		return (this.discountRate = newRate);
 	}
 
 	getInitialInvestment() {
@@ -77,6 +82,8 @@ class netPresentValueCalculator {
 	}
 
 	calculateNPV() {
+		console.log(this.cashFlows);
+		console.log(this.discountRate);
 		this.updatePresentValueCashFlowsArray();
 		console.log(this.presentValueOfCashFlows);
 		return {
@@ -85,3 +92,5 @@ class netPresentValueCalculator {
 		};
 	}
 }
+
+module.exports = new netPresentValueCalculator();

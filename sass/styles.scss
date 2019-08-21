@@ -24,12 +24,25 @@ input {
 	text-align: right;
 	font-size: 14px;
 	padding: 5px 10px;
+	color: hsl(215, 30%, 45%);
+}
+
+button {
+	margin: 5px 0;
+	padding: 10px 5px;
+	border: none;
+	border-radius: 5px;
+	background-color: hsl(183, 40%, 35%);
+	color: hsl(183, 50%, 92%);
 }
 
 button:hover {
 	cursor: pointer;
+	background-color: hsl(183, 40%, 55%);
 }
 
 button:disabled {
 	cursor: not-allowed;
+	background-color: #eee;
+	color: #ccc;
 }

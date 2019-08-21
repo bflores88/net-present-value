@@ -96,8 +96,8 @@ function calculateHandler() {
 	const npv = results.npv;
 	const pvcfs = results.pvcfs;
 
-	const resultSummary = document.querySelector('.results-summary');
-	resultSummary.innerHTML = 'Net Present Value: $ ' + parseFloat(npv).toLocaleString();
+	const resultSummary = document.querySelector('.results-amount');
+	resultSummary.innerHTML = '$ ' + parseFloat(npv).toLocaleString();
 
 	const resultsDiv = document.querySelector('#results');
 	resultsDiv.style.display = 'block';
@@ -106,8 +106,8 @@ function calculateHandler() {
 }
 
 function cashFlowArrayToTable(cashFlowArray, type) {
-	let headerColumn1 = 'Year';
-	let headerColumn2 = 'PV of Cash Flows Discounted at ' + discountRate() * 100 + '%';
+	let headerColumn1 = 'Period';
+	let headerColumn2 = 'PV of Cash Flows Discounted at ' + discountRate().toFixed(2) + '%';
 	let placement = document.querySelector('.npv-results-table');
 	let className = 'pv-cash-flow';
 	let tableDepth = cashFlowArray.length + 1;

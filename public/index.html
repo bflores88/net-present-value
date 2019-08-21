@@ -9,14 +9,14 @@
 		<title>NPV Calculator</title>
 	</head>
 	<body>
-		<header id="header"><h2>Net Present Value Calculator</h2></header>
+		<header id="header"><h3>Net Present Value Calculator</h3></header>
 
 		<main id="content">
 			<section class="user-input">
 				<form id="user-input-form">
 					<div class="form-div">
 						<label for="rate">Discount Rate (%)</label>
-						<input type="text" class="rate" name="rate" class="form-input" />
+						<input type="text" class="rate" name="rate" class="form-input" autofocus />
 					</div>
 
 					<div class="form-div">
@@ -28,15 +28,18 @@
 						<label for="period">Length of Project</label>
 						<input type="text" class="period" name="period" class="form-input" />
 					</div>
-					<br />
+
 					<div class="cash-flow-input" style="display: none"></div>
-					<br />
+
 					<button class="form-submit" disabled="true">C A L C U L A T E</button>
 				</form>
 			</section>
 
 			<div id="results" hidden>
-				<section class="results-summary"></section>
+				<section class="results-summary">
+					<p class="results-amount"></p>
+					<p class="results-title">Net Present Value</p>
+				</section>
 
 				<section class="results-table">
 					<div class="npv-results-table"></div>

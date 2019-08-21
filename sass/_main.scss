@@ -14,13 +14,14 @@
 	}
 }
 
-.user-input {
+.user-input,
+#results {
 	width: 90%;
 	margin: 20px auto;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	padding: 20px 10px;
+	padding: 30px 10px;
 
 	@media (min-width: 1000px) {
 		width: 40%;
@@ -30,8 +31,12 @@
 form {
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 90%;
 	margin: 0 auto;
+
+	@media (min-width: 1000px) {
+		width: 80%;
+	}
 
 	.form-div {
 		width: 100%;
@@ -56,9 +61,27 @@ form {
 .npv-results-table {
 	display: flex;
 	flex-direction: column;
+	padding: 15px 10px;
+	margin: 20px 0;
+	font-weight: 700;
+}
+
+.cash-flow-input {
 	background-color: hsl(215, 80%, 80%);
 	border-radius: 5px;
-	padding: 15px 10px;
+}
+
+.npv-results-table {
+}
+
+.pv-cash-flow-row {
+	border-bottom: 1px dotted hsl(215, 60%, 65%);
+	padding-bottom: 5px;
+
+	&:hover:not(:first-of-type) {
+		color: hsl(215, 80%, 80%);
+		cursor: default;
+	}
 }
 
 .cf-input-row,
@@ -78,6 +101,12 @@ form {
 		text-align: center;
 	}
 
+	.col1-header,
+	.col2-header {
+		margin-bottom: 10px;
+		font-weight: 400;
+	}
+
 	.col2-header {
 		width: 40%;
 		text-align: center;
@@ -91,6 +120,24 @@ form {
 		input {
 			width: 100%;
 		}
+	}
+}
+
+.results-summary {
+	font-size: 25px;
+	color: hsl(215, 60%, 60%);
+
+	.results-amount:hover {
+		font-size: 30px;
+	}
+
+	.results-title {
+		color: #bbb;
+		font-size: 16px;
+	}
+
+	p {
+		margin: 5px 0;
 	}
 }
 
