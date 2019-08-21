@@ -82,10 +82,7 @@ class netPresentValueCalculator {
 	}
 
 	calculateNPV() {
-		console.log(this.cashFlows);
-		console.log(this.discountRate);
 		this.updatePresentValueCashFlowsArray();
-		console.log(this.presentValueOfCashFlows);
 		return {
 			npv: this.getTotalPresentValueOfCashFlows(),
 			pvcfs: this.presentValueOfCashFlows,
